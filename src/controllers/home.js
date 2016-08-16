@@ -24,6 +24,11 @@ HomeController.route('/all/?')
     Stat.find(function(err, stats) { //Find ALL stats within database
       res.json(stats);
     })
+  })
+  .delete(function(req, res, next) {
+    Stat.remove({}) {
+        res.json({message: "Deleted all entries, I think "});
+      };    
   });
 ////=======================  
 
