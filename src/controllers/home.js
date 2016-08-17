@@ -55,8 +55,7 @@ HomeController.route('/?')
       console.log(req.body.age_group);
       console.log(req.body.gender);
 
-    Stat.find({state: req.body.state}, function(error, stateMatch) {     
-      //for(var tsi = 0; tsi < stateMatch.length; tsi++) { 
+    Stat.find({state: req.body.state}, function(error, stateMatch) {
       if(error){console.log("Error: " + error);}
       else{
 
@@ -65,14 +64,12 @@ HomeController.route('/?')
         };
        console.log("This is topState below with NO DELAY");
         console.log(topState.length);
-
-        // topState.forEach(function(v){ delete v["id"] }); // there were issues Jjson parsing the "_id"
-
-        var stringResults = JSON.stringify(topState);
-        //stringResults = stringResults.replace(/_id/g, 'id'); //keeping this here for now
+        // var stringResults = topState;
         console.log("stringified resuts");
 
-        res.render('home', {topState: stringResults});
+        // res.render('home', {topState: stringResults});
+        res.json(topState);
+        // return json(stringResults);
 
     }
 

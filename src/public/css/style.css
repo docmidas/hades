@@ -201,5 +201,5 @@ input[type=checkbox] {
   margin-right: 0;
 }
 .results {
-  visibility: hidden;
+  display: none;
 }
