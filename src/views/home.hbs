@@ -1,12 +1,130 @@
-<main>
-  <div>
-    <h1>Welcome home!!!</h1>
-    <link rel="stylesheet" type="text/css" href="css/style.less">
+<main class="container">
+  <div class="row">
+    <div class="col-5">
+      <div class="formArea">
+        <h2>Fill in the details below</h2>
+        <form name="profile-form" method="post" action="/" accept-charset="utf-8">
+          <label for="name" >State</label>
+            <select name="state" required>
+              <option value=""></option>
+              <option value="Alabama">Alabama</option>
+              <option value="Alaska">Alaska</option>
+              <option value="Arizona">Arizona</option>
+              <option value="Arkansas">Arkansas</option>
+              <option value="California">California</option>
+              <option value="Colorado">Colorado</option>
+              <option value="Connecticut">Connecticut</option>
+              <option value="Delaware">Delaware</option>
+              <option value="Florida">Florida</option>
+              <option value="Georgia">Georgia</option>
+              <option value="Hawaii">Hawaii</option>
+              <option value="Idaho">Idaho</option>
+              <option value="Illinois">Illinois</option>
+              <option value="Indiana">Indiana</option> 
+              <option value="Iowa">Iowa</option>
+              <option value="Kansas">Kansas</option>
+              <option value="Kentucky">Kentucky</option>
+              <option value="Louisiana">Louisiana</option>
+              <option value="Maine">Maine</option>
+              <option value="Maryland">Maryland</option>
+              <option value="Massachusetts">Massachusetts</option>
+              <option value="Michigan">Michigan</option>
+              <option value="Minnesota">Minnesota</option>
+              <option value="Mississippi">Mississippi</option>
+              <option value="Missouri">Missouri</option>
+              <option value="Montana">Montana</option>
+              <option value="Nebraska">Nebraska</option>
+              <option value="Nevada">Nevada</option> 
+              <option value="New Hampshire">New Hampshire</option>
+              <option value="New Jersey">New Jersey</option>
+              <option value="New Mexico">New Mexico</option>
+              <option value="New York">New York</option>
+              <option value="North Carolina">North Carolina</option>
+              <option value="North Dakota">North Dakota</option>
+              <option value="Ohio">Ohio</option>
+              <option value="Oklahaoma">Oklahaoma</option>
+              <option value="Oregon">Oregon</option>
+              <option value="Pennsylvania">Pennsylvania</option>
+              <option value="Rhode Island">Rhode Island</option>
+              <option value="South Carolina">South Carolina</option>
+              <option value="South Dakota">South Dakota</option>
+              <option value="Tennesse">Tennesse</option>
+              <option value="Texas">Texas</option> 
+              <option value="Utah">Utah</option>
+              <option value="Vermont">Vermont</option>
+              <option value="Virginia">Virginia</option>
+              <option value="Washington">Washington</option>
+              <option value="West Virginia">West Virginia</option>
+              <option value="Wisconsin">Wisconsin</option>
+              <option value="Wyoming">Wyoming</option> 
+          </select>
+          <br />
+          <label for="age_group" >Age Group</label>
+            <select name="age_group" required>
+              <option value=""></option>
+              <option value="< 1 year">under 1 year</option>
+              <option value="1-4 years">1-4 year(s)</option>
+              <option value="5-14 years">5-14 years</option>
+              <option value="15-24 years">15-24 years</option>
+              <option value="25-34 years">25-34 years</option>
+              <option value="35-44 years">35-44 years</option>
+              <option value="45-54 years">45-54 years</option>
+              <option value="55-64 years">55-64 years</option>
+              <option value="65-74 years">65-74 years</option>
+              <option value="75-84 years">75-84 years</option>
+              <option value="85+ years">85+ years</option>
+          </select>
+          <br />
+          <label for="gender" >Sex</label>
+            <select name="gender" required>
+              <option value=""></option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          <br />
+          <button>Submit</button>
+        </form>
+      </div>   
+    </div>
+    <div class="col-5">
+      <div class="pieChart">   
+        <h3>Pie Title</h3>
+        <p>I'm your pie chart</p>
+      </div>              
+    </div> 
+
   </div>
-  <div>
-    <a href="/login">Login</a>
+  <!-- End of row -->
+
+  <div class="row">
+    <div class="col-5">
+      <div class="ageHistogram">
+        <h3>Histogram Title</h3>
+        <p>I'm your HISTOGRAM</p>        
+      </div>      
+    </div>
+    <div class="col-5">
+      <div class="radar">
+        <h3>Radar Title</h3>
+        <p>I'm your RADAR</p>        
+      </div>      
+    </div>
   </div>
-  <div>
-    <a href="/signup">Signup</a>
+  <!-- End of row -->
+
+  <div class="row">
+    <div class="col-12">
+      <div class="targetClass">
+        Pikachu        
+      </div>      
+    </div>
   </div>
+
+  <div class="results">
+        {{#if topState}}
+          {{topState}}
+        {{/if}}
+      </div>
+  
 </main>
+<script type="text/javascript" src="/js/graphs.js"></script>
