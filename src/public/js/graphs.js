@@ -1,6 +1,5 @@
 console.log("'graphs.js' connected");
-
-// pieData = dexTarget;
+var rawData;
 
 $('form').submit(function(event){
   event.preventDefault();
@@ -18,97 +17,158 @@ $('form').submit(function(event){
     },
     dataType: 'json',
     success: function(responseData){
-
-      console.log("post request SUCCESFUL");
-      console.log(responseData);        
+      console.log("post request SUCCESSFUL");
+      rawData = responseData;
+      //console.log(rawData); 
+      //console.log("jusr b4 GenGraphs, histoData: " + histoData);
+      GenGraphs(rawData);       
     },
     error: function(error){
       return console.log("There was an error: " + error);
     }  
   })
+  
 });
-// };  
+  
 
 
-
-
+//////===========PIE CHART
 // d3.select(".pieChart")
 //   .append("p")
 //   .text("FINALLY got some D3!");
-
-//===============
-//  var orangeData = [10, 30, 50, 100]; 
-
-// var canvas = d3.select(".pieChart")
-//   .append("svg")
-//   .attr("width", 768)
-//   .attr("height", 200);
-
-// var oranges = canvas.selectAll("circle")
-//   .data(orangeData)
-//   .enter()
-//   .append("circle")
-//   .attr("fill", "orange")
-//   .attr("cx", function(d, i) {
-//     return d + (i * 100);
-//   })
-//   .attr("cy", function(d) {
-//     return d;
-//   })
-//   .attr("r", function(d) {
-//     return d;
-//   });
-//   //==============
-//   ///HISTOGRAM
-
-//   var graphData = [1, 800, 1200],
-//       w = 800
-//       h = 800; 
-
-//   var scaling = d3.scale.linear()
-//     .domain([0, 1200])
-//     .range([0, w]);
-
-//  var axis = d3.svg.axis()
-//   .ticks(5)
-//   .scale(scaling);   
-
-// var canvas = d3.select(".ageHistogram")
-//   .append("svg")
-//   .attr("width", w)
-//   .attr("height", h)
-//   .append("g")
-//   .attr("transform", "translate(30, 20)");
-
-
-// var graphBars = canvas.selectAll("rect")
-//   .data(graphData)
-//   .enter()
-//   .append("rect")
-//   .attr("fill", "pink")
-//   .attr("width", 0)
+//////=============
+/////HISTOGRAM  
   
-//   .transition()
-//   .duration(1300)
-//   .delay(500)
-//   .attr("width", function(d) {
-//     return scaling(d);
-//   })
+function GenGraphs(rawData) {
+  console.log("Inside GenGraphs");
+  console.log("This is rawData length " + rawData.length)
+  
+  // console.log(document.getElementsByTagName('svg')[0] == true);
+  // console.log($('select[name="gender"]').val());
+  // console.log($('select[name="age_group"]').val());
 
-//   .attr("height", 20)
-//   .attr("y", function(d, i) {
-//     return i * 50;
-//   });
-
-//   canvas.append("g") //append axis 
-//     .attr("transform", "translate(0,200)")
-//     .call(axis);
-
+  // function filterByDem(obj) {
+  //   if (obj.gender == $('select[name="gender"]').val() && obj.age_group == $('select[name="age_group"]').val()) {
+  //     return true;
+  //   }
+  // }
+  // var filteredArray = histoData.filter(filterByDem);
 
 
+  if(child = document.getElementsByTagName('svg').length > 0){
+    var parent = document.getElementsByClassName("ageHistogram")[0];
+    var child = document.getElementsByTagName("svg")[0];
+    parent.removeChild(child);    
+  }
+
+  var histoData = [];
+
+  rawData.forEach(function(obj, index){
+    if(obj.gender == $('select[name="gender"]').val() && obj.age_group == $('select[name="age_group"]').val()){
+      histoData.push(obj);
+      //console.log(obj);
+    };
+  });
+
+  if (histoData.length > 0) {
+    
+
+  //   console.log(index);
+
+    // for(var property in e) {
+    //   if(e.gender == $('select[name="gender"]').val() && e.age_group == $('select[name="age_group"]').val()){
+    //     histoData.push(e);
+    //   }
+    // };
+  
+
+console.log("This is the filtered histoData, below...")
+console.log(histoData);
 
 
 
+  histoData.sort(function(a, b) { 
+    return b.deaths - a.deaths;
+});
+
+  histoDataLength = histoData.length >= 5 ? 5 : histoData.length;
+
+
+
+  histoData = histoData.slice(0, histoDataLength);
+  // var graphData = [1, 800, 1200],
+  console.log("Inside GenGraphs, histoData below ");
+  console.log(histoData);
+  var graphData = histoData,
+      w = 500
+      h = 250; 
+
+
+  var scaling = d3.scale.linear()
+    .domain([graphData[histoDataLength-1].deaths >= 100 ? graphData[histoDataLength-1].deaths - 100 : 0,  graphData[0].deaths * 1.1])
+    .range([0, w]);
+
+ var axis = d3.svg.axis()
+  .ticks(6)
+  .scale(scaling);  
+
+var canvas = d3.select(".ageHistogram")
+  .append("svg")
+  .attr("width", w)
+  .attr("height", h)
+  .append("g")
+  .attr("transform", "translate(30, 20)");
+
+
+var graphBars = canvas.selectAll("rect")
+  .data(graphData)
+  .enter()
+  .append("rect")
+  .attr("fill", "pink")
+  .attr("width", 0)  
+  .transition()
+  .duration(1300)
+  .delay(500)
+  .attr("width", function(d) {
+    return scaling(d.deaths);
+    //console.log(d.deaths);
+    //return (d.deaths);
+  })
+  .attr("height", 20)
+  .attr("y", function(d, i) {
+    return i * 40;
+  });
+
+
+canvas.selectAll("text")
+  .data(graphData)
+  .enter()
+  .append("text")
+  .attr("fill", "blue")
+  .transition()
+  .delay(1500)
+  .attr("y", function(d, i) {
+    return (i * 40) + 15;
+  })
+  .attr("x", 5)
+  .text(function(d) {
+    return d.icd + " Deaths: " + d.deaths;
+  });
+
+  canvas.append("g") //append axis 
+    .attr("transform", "translate(0,200)")
+    .call(axis);
+
+
+
+    console.log(document.getElementsByTagName('svg'));
+  } else{
+    d3.select(".ageHistogram")
+    .append("p")
+    .text("No results for this demo");
+
+  };  
+}    
 
 
 

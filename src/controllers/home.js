@@ -37,6 +37,7 @@ HomeController.route('/all/?')
   ///////delete all stats from database
   .delete(function(req, res, next) {
     Stat.remove({}, function(err,removed) {})
+    res.json("Deleted everything")
   });
 ////=======================
 HomeController.route('/?')
@@ -65,7 +66,6 @@ HomeController.route('/?')
        console.log("This is topState below with NO DELAY");
         console.log(topState.length);
         // var stringResults = topState;
-        console.log("stringified resuts");
 
         // res.render('home', {topState: stringResults});
         res.json(topState);
