@@ -320,7 +320,7 @@ canvas.selectAll("text")
         .attr("transform", "rotate(-90)")
         .attr("x", -h/2)
         .attr("font-size", "22px")
-        .attr("dy", "-2em")
+        .attr("dy", "-3em")
         .attr("fill", "#3DBE2E")
         .style("text-anchor", "middle")
         .text("Deaths by #1 State Cause");

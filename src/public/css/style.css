@@ -74,7 +74,7 @@ input[type=checkbox] {
   float: left;
   width: 100%;
   margin-right: 3%;
-  border: solid black 1px;
+  border: solid black 0px;
 }
 .col-12:last-child {
   margin-right: 0;
@@ -85,7 +85,7 @@ input[type=checkbox] {
   float: left;
   width: 91.41666667%;
   margin-right: 3%;
-  border: solid black 1px;
+  border: solid black 0px;
 }
 .col-11:last-child {
   margin-right: 0;
@@ -96,7 +96,7 @@ input[type=checkbox] {
   float: left;
   width: 82.83333333%;
   margin-right: 3%;
-  border: solid black 1px;
+  border: solid black 0px;
 }
 .col-10:last-child {
   margin-right: 0;
@@ -107,7 +107,7 @@ input[type=checkbox] {
   float: left;
   width: 74.25%;
   margin-right: 3%;
-  border: solid black 1px;
+  border: solid black 0px;
 }
 .col-9:last-child {
   margin-right: 0;
@@ -118,7 +118,7 @@ input[type=checkbox] {
   float: left;
   width: 65.66666667%;
   margin-right: 3%;
-  border: solid black 1px;
+  border: solid black 0px;
 }
 .col-8:last-child {
   margin-right: 0;
@@ -129,7 +129,7 @@ input[type=checkbox] {
   float: left;
   width: 57.08333333%;
   margin-right: 3%;
-  border: solid black 1px;
+  border: solid black 0px;
 }
 .col-7:last-child {
   margin-right: 0;
@@ -140,7 +140,7 @@ input[type=checkbox] {
   float: left;
   width: 48.5%;
   margin-right: 3%;
-  border: solid black 1px;
+  border: solid black 0px;
 }
 .col-6:last-child {
   margin-right: 0;
@@ -151,7 +151,7 @@ input[type=checkbox] {
   float: left;
   width: 39.91666667%;
   margin-right: 3%;
-  border: solid black 1px;
+  border: solid black 0px;
 }
 .col-5:last-child {
   margin-right: 0;
@@ -162,7 +162,7 @@ input[type=checkbox] {
   float: left;
   width: 31.33333333%;
   margin-right: 3%;
-  border: solid black 1px;
+  border: solid black 0px;
 }
 .col-4:last-child {
   margin-right: 0;
@@ -173,7 +173,7 @@ input[type=checkbox] {
   float: left;
   width: 22.75%;
   margin-right: 3%;
-  border: solid black 1px;
+  border: solid black 0px;
 }
 .col-3:last-child {
   margin-right: 0;
@@ -184,7 +184,7 @@ input[type=checkbox] {
   float: left;
   width: 14.16666667%;
   margin-right: 3%;
-  border: solid black 1px;
+  border: solid black 0px;
 }
 .col-2:last-child {
   margin-right: 0;
@@ -195,26 +195,76 @@ input[type=checkbox] {
   float: left;
   width: 5.58333333%;
   margin-right: 3%;
-  border: solid black 1px;
+  border: solid black 0px;
 }
 .col-1:last-child {
   margin-right: 0;
 }
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  margin: 0;
+}
 body {
   background-image: url(/img/hadesBg.jpg);
+  background-size: 100%;
+  background-attachment: fixed;
+  background-size: cover;
+}
+svg {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+.col-4,
+.col-5 {
+  min-height: 400px;
+}
+h1 {
+  margin-top: 0px;
+  margin-bottom: 2px;
+}
+h3,
+h6 {
+  margin-top: 2px;
+  margin-bottom: 5px;
+}
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #3DBE2E;
+  shape-rendering: crispEdges;
+}
+.axis text {
+  font: Times;
+  font-size: 18px;
+  font-weight: bold;
+  fill: #3DBE2E;
 }
 .results {
   display: none;
 }
-svg {
-  border: solid red 2px;
-  display: block;
-}
-button {
-  background-color: cyan;
+button,
+select {
+  background-color: #048CD2;
   margin-left: 2px;
+  width: 200px;
+  border: none;
+  color: #272727;
+  padding: 16px 32px;
+  margin: 4px 2px;
+  cursor: pointer;
+  text-decoration: none;
 }
 form label:not(:first-child) {
   margin-left: 30px;
   color: red;
+}
+.topper {
+  background-color: black;
+}
+.copyright {
+  display: block;
+  margin: auto;
 }
