@@ -50,17 +50,22 @@ function GenPie(rawData) {
 
   ////////DEX REDO check for existings graphs!!!!
 
-       // if(document.getElementsByTagName('svg').length > 0){
-  //   var parent = document.getElementsByClassName("ageHistogram")[0];
-  //   var child = document.getElementsByTagName("svg")[0];
-  //   var childRadar = document.getElementsByTagName("svg")[1];
-  //   parent.removeChild(child); 
-  //   var parentRadar = document.getElementsByClassName("radar")[0];
-  //   parentRadar.removeChild(childRadar);    
-  // }
+  if(document.getElementsByTagName('svg').length > 0){
+      var parentPie = document.getElementsByClassName("pieChart")[0];
+      var childPie = document.getElementsByTagName("svg")[0];      
+    
+    var parentHisto = document.getElementsByClassName("ageHistogram")[0]; 
+    var childHisto = document.getElementsByTagName("svg")[1];
+    parentPie.removeChild(childPie);    
+    parentHisto.removeChild(childHisto);  
+  };
 
-    //////TEST pieData
-   //pieData = [300, 60, 156, 175, 80];
+  if(document.getElementsByTagName("p").length > 0){
+      for (var ip = 0; ip < document.getElementsByTagName("p").length; ip++) {
+        // var childPiePar = document.getElementsByTagName("p")[0];
+        document.getElementsByClassName("pieChart")[0].removeChild(document.getElementsByTagName("p")[0]);        
+      };
+   };   
 
   ////check for data, then graph it
   if (pieData.length > 0) { 
@@ -84,8 +89,9 @@ function GenPie(rawData) {
     pieData = pieData.slice(0, pieDataLength);
 
         
-    var color = d3.scale.ordinal()
-      .range(["red", "purple", "orange", "blue", "yellow"]);
+    // var color = d3.scale.ordinal()
+    //   .range(["red", "purple", "orange", "blue", "yellow"]);
+    var color = d3.scale.category20b();
    
     console.log("Inside GenPie, pieData below ");
     console.log(pieData);
@@ -118,15 +124,74 @@ function GenPie(rawData) {
       .enter()
       .append('path')
       .attr('d', d3.svg.arc().innerRadius(0).outerRadius(0))
-      // .style("opacity", 0)
+      .style("opacity", 0)
       .attr('fill', function(d, i) {
         return color(d.data.deaths);
       })
   .transition()
-  .delay(1100)
+  .delay(100)
   .duration(1500)
-      // .style("opacity", 1)
+      .style("opacity", 1)
       .attr('d', arc);
+
+      ////LEGEND
+
+    var legendRectSize = 18;
+var legendSpacing = 4;
+
+// var legend = canvas.selectAll('.legend')
+//   .data(graphData)
+//   .enter()
+//   .append('g')
+//   .attr('class', 'legend')
+//   .attr('transform', function(d, i) {
+//     var height = legendRectSize + legendSpacing;
+//     var offset =  height * color.domain().length / 2;
+//     var horz = -2 * legendRectSize;
+//     var vert = i * height - offset;
+//     return 'translate(' + horz + ',' + vert + ')';
+//   });
+
+//   legend.append('rect')
+//   .attr('width', legendRectSize)
+//   .attr('height', legendRectSize)
+//   .style('fill', color)
+//   .style('stroke', color);
+
+//   legend.append('text')
+//   .attr('x', legendRectSize + legendSpacing)
+//   .attr('y', legendRectSize - legendSpacing)
+//   .text(function(d) { return d.icd; });
+
+var legend = canvas.selectAll('.legend')                     // NEW
+          .data(color.domain())                                   // NEW
+          .enter()                                                // NEW
+          .append('g')                                            // NEW
+          .attr('class', 'legend')                                // NEW
+          .attr('transform', function(d, i) {                     // NEW
+            var height = legendRectSize + legendSpacing;          // NEW
+            var offset =  height * color.domain().length / 2;     // NEW
+            var horz = -2 * legendRectSize;                       // NEW
+            var vert = i * height - offset;                       // NEW
+            return 'translate(' + horz + ',' + vert + ')';        // NEW
+          });                                                     // NEW
+
+        legend.append('rect')                                     // NEW
+          .attr('width', legendRectSize)                          // NEW
+          .attr('height', legendRectSize)                         // NEW
+          .style('fill', color)                                   // NEW
+          .style('stroke', color);                                // NEW
+          
+        legend.append('text')                                     // NEW
+          .attr('x', legendRectSize + legendSpacing)              // NEW
+          .attr('y', legendRectSize - legendSpacing)              // NEW
+          .text(function(d,i) { return graphData[i].icd; });  
+
+
+
+
+
+
 
       GenHisto(rawData, topStateIcd);
   
@@ -291,7 +356,7 @@ canvas.selectAll("text")
   .attr({
       "x": function(d){ return xScale(d.age_group) +  xScale.rangeBand()/2; },
       "y": function(d){ return yScale(d.deaths)+ 12; },
-      "font-family": 'sans-serif',
+      // "font-family": 'sans-serif',
       "font-size": '18px',
       "font-weight": 'bold',
       "fill": 'white',

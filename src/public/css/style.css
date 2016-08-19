@@ -208,7 +208,6 @@ input[type=checkbox] {
 }
 body {
   background-image: url(/img/hadesBg.jpg);
-  background-size: 100%;
   background-attachment: fixed;
   background-size: cover;
 }
@@ -230,6 +229,14 @@ h6 {
   margin-top: 2px;
   margin-bottom: 5px;
 }
+h4 {
+  font-size: 12px;
+  margin: 0;
+  color: pink;
+}
+h6 {
+  font-style: italic;
+}
 .axis path,
 .axis line {
   fill: none;
@@ -248,21 +255,31 @@ h6 {
 button,
 select {
   background-color: #048CD2;
+  color: #272727;
   margin-left: 2px;
   width: 200px;
-  border: none;
-  color: #272727;
+  border-radius: 12px;
   padding: 16px 32px;
   margin: 4px 2px;
   cursor: pointer;
   text-decoration: none;
+  border: 2px solid #8F233C;
 }
-form label:not(:first-child) {
+button:hover {
+  cursor: pointer;
+  border-radius: 6px;
+  color: #EDF2F4;
+  background-color: #8F233C;
+  border: 2px solid #2B2D42;
+}
+label {
+  color: #50D8D7;
+}
+label:not(:first-child) {
   margin-left: 30px;
-  color: red;
 }
 .topper {
-  background-color: black;
+  background: rgba(0, 0, 0, 0.25);
 }
 .copyright {
   display: block;

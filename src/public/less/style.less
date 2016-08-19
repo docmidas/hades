@@ -12,7 +12,7 @@
 body {  
   //background-color: green;
   background-image: url(/img/hadesBg.jpg);
-  background-size:       100%;
+  //background-size:       100%;
   background-attachment: fixed;
   background-size: cover;
 }
@@ -40,6 +40,16 @@ h1 {
 h3, h6 {
   margin-top: 2px;
   margin-bottom: 5px
+}
+
+h4 {
+  font-size: 12px;
+  margin: 0;
+  color: pink;
+}
+
+h6 {
+  font-style: italic;
 }
 
 .axis path,
@@ -85,13 +95,19 @@ button:hover {
   border: 2px solid @textColor;
   }
 
-form label:not(:first-child) {
+label {
+  color: @heading-color;
+}
+
+label:not(:first-child) {
   margin-left: 30px;
-  color: red;
 }
 
 .topper {
-  background-color: black;
+  // background-color: black;  
+  // opacity: 0.5;
+  background: rgba(0, 0, 0, .25);
+  //box-shadow: 5px -2px 2px rgba(34,34,34,0.6);
 }
 
 .copyright {
