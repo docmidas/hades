@@ -8,13 +8,8 @@ var express         = require('express'),
     fs              = require("fs");
 ////////
 
-// var testStats = [{"state":"Alabama (01)","age_group":"< 1 year","icd":"P00-P04 (Newborn affected by maternal factors and by complications of pregnancy, labour and delivery)","gender":"Female","deaths":18,"population":28346},
-// {"state":"Alabama (01)","age_group":"< 1 year","icd":"P00-P04 (Newborn affected by maternal factors and by complications of pregnancy, labour and delivery)","gender":"Male","deaths":12,"population":29508}];
-
-//var testStats = fs.readFileSync('./sampleData.json');
 var testStats = fs.readFileSync('./formattedStats.json');
 testStats = JSON.parse(testStats);
-
 
 ////
 ////////=======================
@@ -59,39 +54,37 @@ HomeController.route('/?')
     Stat.find({state: req.body.state}, function(error, stateMatch) {
       if(error){console.log("Error: " + error);}
       else{
-
         for(var tsi = 0; tsi < stateMatch.length; tsi++) {  
             topState.push(stateMatch[tsi]);         
         };
-       console.log("This is topState below with NO DELAY");
+        console.log("Length of results, based on STATE, below with NO DELAY");
         console.log(topState.length);
-        // var stringResults = topState;
 
         // res.render('home', {topState: stringResults});
+        //res.json(topState);
+        //res.json([topState, ]);
+      }
+
+        //query on state and age
+        // Stat.find({state: req.body.state, age_group: req.body.age_group}, function(error, ageMatch) {     
+        //   for(var ageIndex = 0; ageIndex < ageMatch.length; ageIndex++) {        
+        //       leadByAge.push(ageMatch[ageIndex]);         
+        //   };
+        // })
+        // ///query against state, age, sex
+        // Stat.find({state: req.body.state, age_group: req.body.age_group, gender: req.body.gender}, function(error, statList) {     
+        //   for(var si = 0; si < statList.length; si++) {        
+        //       userStats.push(statList[si]);         
+        //   };
+        // })
+    
+
+        //res.render('home', {topState: topState, leadByAge: leadByAge, userStats: userStats});
         res.json(topState);
-        // return json(stringResults);
-
-    }
-
-    //query on state and age
-    // Stat.find({state: req.body.state, age_group: req.body.age_group}, function(error, ageMatch) {     
-    //   for(var ageIndex = 0; ageIndex < ageMatch.length; ageIndex++) {        
-    //       leadByAge.push(ageMatch[ageIndex]);         
-    //   };
-    // })
-    // ///query against state, age, sex
-    // Stat.find({state: req.body.state, age_group: req.body.age_group, gender: req.body.gender}, function(error, statList) {     
-    //   for(var si = 0; si < statList.length; si++) {        
-    //       userStats.push(statList[si]);         
-    //   };
-    // })
+    }); //end of Stat.find
     
-
-    //res.render('home', {topState: topState, leadByAge: leadByAge, userStats: userStats});
-
-  }) //end of esle
     
-  })
+  })//end of post
   // GET /
   // ------
   // load main page
