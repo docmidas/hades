@@ -1,13 +1,10 @@
-console.log("'graphs.js' connected");
 var rawData;
 var UniversalGraphHeight = 400;
 
 $('form').submit(function(event){
   event.preventDefault();
-  // console.log("INPUT" + $('input[name="state"]').val());
-  // console.log("LABEL" + $('label[name="state"]').val());
-  // console.log("SELECT" + $('select[name="state"]').val());
 
+///initiate call to my databse of deaths stats
   $.ajax({
     type: 'post',
     url: "http://localhost:3000/",
@@ -18,38 +15,31 @@ $('form').submit(function(event){
     },
     dataType: 'json',
     success: function(responseData){
-      console.log("post request SUCCESSFUL");
       rawData = responseData;
-      //console.log(rawData); 
-      //console.log("jusr b4 GenHisto, histoData: " + histoData);
-      GenPie(rawData);
-      //GenRadar(rawData);      
+      GenPie(rawData);     
     },
     error: function(error){
-      return console.log("There was an error: " + error);
+      return res.json( error);
     }  
   })  
 });
 
 /////=============================================/////////
-////START of GenPie
+////START of GenPie: generate pie graph
 //////////////////
 
 function GenPie(rawData) {
-  console.log("Inside GenPie");
-  console.log("This is rawData length " + rawData.length)
   var pieData = [];
 
   /////format data sets for men vs women for top causes
   rawData.forEach(function(obj, index){
     if(obj.gender == $('select[name="gender"]').val() && obj.age_group == $('select[name="age_group"]').val()){
       pieData.push(obj);
-      //console.log(obj);
+    
     };
   });
 
-  ////////DEX REDO check for existings graphs!!!!
-
+  //////// check for existings graphs or warnings
   if(document.getElementsByTagName('svg').length > 0){
       var parentPie = document.getElementsByClassName("pieChart")[0];
       var childPie = document.getElementsByTagName("svg")[0];      
@@ -69,38 +59,27 @@ function GenPie(rawData) {
 
   ////check for data, then graph it
   if (pieData.length > 0) { 
-
-    console.log("This is the filtered pieData, below...")
-    console.log(pieData);
-
-
     pieData.sort(function(a, b) { 
       return b.deaths - a.deaths;
     });
 
     var topStateIcd = pieData[0];
-    console.log("topStateIcd follows....")
-    console.log(topStateIcd)
-
-     var radius = 150;
+    var radius = 150;
 
     pieDataLength = pieData.length >= 5 ? 5 : pieData.length;
 
     pieData = pieData.slice(0, pieDataLength);
 
-        
+
     // var color = d3.scale.ordinal()
-    //   .range(["red", "purple", "orange", "blue", "yellow"]);
-    var color = d3.scale.category20b();
-   
-    console.log("Inside GenPie, pieData below ");
-    console.log(pieData);
+    //   .range(["#1F7F14", "#1414FF", "cyan", "#3B60E4", "#5544BF"]);
+
+      var color = d3.scale.ordinal()
+      .range(["#1111FF", "#2306C2", "#263F9E", "#5544BF", "#563491"]);
 
     var graphData = pieData,
         w = 350
         h = UniversalGraphHeight; 
-  
-
 
     var canvas = d3.select(".pieChart")
       .append("svg")
@@ -111,12 +90,10 @@ function GenPie(rawData) {
 
     var arc = d3.svg.arc()
       .innerRadius(0)
-      .outerRadius(radius);  
-   
+      .outerRadius(radius);     
 
     var pie = d3.layout.pie()
       .value(function(d) {return d.deaths});
-      //.value(function(d) {return d});
 
     var path = canvas.selectAll('path')
       .attr("transform", "translate(20, 0)")
@@ -135,62 +112,35 @@ function GenPie(rawData) {
       .attr('d', arc);
 
       ////LEGEND
-
     var legendRectSize = 18;
 var legendSpacing = 4;
 
-// var legend = canvas.selectAll('.legend')
-//   .data(graphData)
-//   .enter()
-//   .append('g')
-//   .attr('class', 'legend')
-//   .attr('transform', function(d, i) {
-//     var height = legendRectSize + legendSpacing;
-//     var offset =  height * color.domain().length / 2;
-//     var horz = -2 * legendRectSize;
-//     var vert = i * height - offset;
-//     return 'translate(' + horz + ',' + vert + ')';
-//   });
+var legend = canvas.selectAll('.legend')                   
+          .data(color.domain())                                 
+          .enter()                                              
+          .append('g')                                          
+          .attr('class', 'legend')                              
+          .attr('transform', function(d, i) {                   
+            var height = legendRectSize + legendSpacing;        
+            var offset =  height * color.domain().length / 10;   
+            var horz = -3 * legendRectSize;                     
+            var vert = i * height - offset + 150;                     
+            return 'translate(' + (2.5 * horz) + ',' + vert + ')';      
+          });                                                   
 
-//   legend.append('rect')
-//   .attr('width', legendRectSize)
-//   .attr('height', legendRectSize)
-//   .style('fill', color)
-//   .style('stroke', color);
-
-//   legend.append('text')
-//   .attr('x', legendRectSize + legendSpacing)
-//   .attr('y', legendRectSize - legendSpacing)
-//   .text(function(d) { return d.icd; });
-
-var legend = canvas.selectAll('.legend')                     // NEW
-          .data(color.domain())                                   // NEW
-          .enter()                                                // NEW
-          .append('g')                                            // NEW
-          .attr('class', 'legend')                                // NEW
-          .attr('transform', function(d, i) {                     // NEW
-            var height = legendRectSize + legendSpacing;          // NEW
-            var offset =  height * color.domain().length / 2;     // NEW
-            var horz = -2 * legendRectSize;                       // NEW
-            var vert = i * height - offset;                       // NEW
-            return 'translate(' + horz + ',' + vert + ')';        // NEW
-          });                                                     // NEW
-
-        legend.append('rect')                                     // NEW
-          .attr('width', legendRectSize)                          // NEW
-          .attr('height', legendRectSize)                         // NEW
-          .style('fill', color)                                   // NEW
-          .style('stroke', color);                                // NEW
+        legend.append('rect')                                   
+          .attr('width', legendRectSize)                        
+          .attr('height', legendRectSize)                       
+          .style('fill', color)                                 
+          .style('stroke', "black");                              
           
-        legend.append('text')                                     // NEW
-          .attr('x', legendRectSize + legendSpacing)              // NEW
-          .attr('y', legendRectSize - legendSpacing)              // NEW
-          .text(function(d,i) { return graphData[i].icd; });  
-
-
-
-
-
+        legend.append('text')                                   
+          .attr('x', legendRectSize + legendSpacing)            
+          .attr('y', legendRectSize - legendSpacing)  
+          .attr("fill", "#3DBE2E")
+          .attr("font-size", "16px")
+          .attr("font-weight", "bolder")
+          .text(function(d,i) { return graphData[i].icd.slice(7, graphData[i].icd.length); });
 
 
       GenHisto(rawData, topStateIcd);
@@ -199,19 +149,15 @@ var legend = canvas.selectAll('.legend')                     // NEW
   else{
       d3.select(".pieChart")
       .append("p")
-      .text("No results for this demo");
+      .text("No results for this demographic");
 
   };  
 } 
 ///////
 //////=============
-/////HISTOGRAM  
+///// GENERATE HISTOGRAM  
   
 function GenHisto(rawData, topStateIcd) {
-  console.log("Inside GenHisto");
-  console.log("This is rawData length " + rawData.length)
-  console.log("topStateIcd follows");
-  console.log(topStateIcd);
 
   
   var margin = {top: 60, right: 10, bottom: 50, left:70};
@@ -244,14 +190,6 @@ var xAxis = d3.svg.axis()
 var yAxis = d3.svg.axis()
     .scale(yScale)
     .orient("left");
-    /*
-    ========
-              */
-
-    console.log("This is the filtered histoData, below...")
-    console.log(histoData);
-
-    
 
     // specify domains of the x and y scales
     histoData.sort(function(a, b) { 
@@ -304,8 +242,6 @@ var yAxis = d3.svg.axis()
     });
 
 
-  console.log("age_groupSort is below");
-  console.log(age_groupSort);
     xScale.domain(age_groupSort.map(function(d) { return d.age_group; }) );  
 
   histoDataLength = histoData.length == 11 ? 11 : histoData.length;
@@ -313,8 +249,6 @@ var yAxis = d3.svg.axis()
   
 
   
-  console.log("Inside GenHisto, histoData below ");
-  console.log(histoData);
 
 var canvas = d3.select(".ageHistogram")
   .append("svg")
@@ -359,7 +293,7 @@ canvas.selectAll("text")
       // "font-family": 'sans-serif',
       "font-size": '18px',
       "font-weight": 'bold',
-      "fill": 'white',
+      "fill": '#CCC0CB',
       "text-anchor": 'middle'
   });
 

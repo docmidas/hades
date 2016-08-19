@@ -223,19 +223,23 @@ svg {
 h1 {
   margin-top: 0px;
   margin-bottom: 2px;
+  font-family: 'Exo 2', sans-serif;
 }
 h3,
 h6 {
   margin-top: 2px;
   margin-bottom: 5px;
+  font-family: 'Exo 2', sans-serif;
 }
 h4 {
   font-size: 12px;
   margin: 0;
   color: pink;
+  font-family: 'Exo 2', sans-serif;
 }
 h6 {
   font-style: italic;
+  font-family: 'Exo 2', sans-serif;
 }
 .axis path,
 .axis line {
@@ -274,6 +278,7 @@ button:hover {
 }
 label {
   color: #50D8D7;
+  font-family: 'Exo 2', sans-serif;
 }
 label:not(:first-child) {
   margin-left: 30px;
@@ -282,6 +287,7 @@ label:not(:first-child) {
   background: rgba(0, 0, 0, 0.25);
 }
 .copyright {
+  font-family: 'Exo 2', sans-serif;
   display: block;
   margin: auto;
 }
