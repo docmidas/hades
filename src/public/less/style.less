@@ -4,6 +4,10 @@
 @import 'modules/type';
 @import 'modules/grid';
 
+body {
+  background-image: url(/img/hadesBg.jpg);
+}
+
 .results {
   // visibility: hidden;
   display: none;
@@ -11,6 +15,16 @@
 
 svg {
   border: solid red 2px;
-  background-color: #666;
+  //background-color: #666;
   display: block;
+}
+
+button {
+  background-color: cyan;
+  margin-left: 2px;
+}
+
+form label:not(:first-child) {
+  margin-left: 30px;
+  color: red;
 }

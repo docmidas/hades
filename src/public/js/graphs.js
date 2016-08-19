@@ -1,6 +1,6 @@
 console.log("'graphs.js' connected");
 var rawData;
-var UniversalGraphHeight = 330;
+var UniversalGraphHeight = 400;
 
 $('form').submit(function(event){
   event.preventDefault();
@@ -48,6 +48,17 @@ function GenPie(rawData) {
     };
   });
 
+  ////////DEX REDO check for existings graphs!!!!
+
+       // if(document.getElementsByTagName('svg').length > 0){
+  //   var parent = document.getElementsByClassName("ageHistogram")[0];
+  //   var child = document.getElementsByTagName("svg")[0];
+  //   var childRadar = document.getElementsByTagName("svg")[1];
+  //   parent.removeChild(child); 
+  //   var parentRadar = document.getElementsByClassName("radar")[0];
+  //   parentRadar.removeChild(childRadar);    
+  // }
+
     //////TEST pieData
    //pieData = [300, 60, 156, 175, 80];
 
@@ -80,7 +91,7 @@ function GenPie(rawData) {
     console.log(pieData);
 
     var graphData = pieData,
-        w = 500
+        w = 350
         h = UniversalGraphHeight; 
   
 
@@ -102,6 +113,7 @@ function GenPie(rawData) {
       //.value(function(d) {return d});
 
     var path = canvas.selectAll('path')
+      .attr("transform", "translate(20, 0)")
       .data(pie(graphData))
       .enter()
       .append('path')
@@ -137,135 +149,186 @@ function GenHisto(rawData, topStateIcd) {
   console.log(topStateIcd);
 
   
-  // console.log(document.getElementsByTagName('svg')[0] == true);
-  // console.log($('select[name="gender"]').val());
-  // console.log($('select[name="age_group"]').val());
-
-  // function filterByDem(obj) {
-  //   if (obj.gender == $('select[name="gender"]').val() && obj.age_group == $('select[name="age_group"]').val()) {
-  //     return true;
-  //   }
-  // }
-  // var filteredArray = histoData.filter(filterByDem);
-
-////////DEX REDO check for existings graphs!!!!
-
-  // if(document.getElementsByTagName('svg').length > 0){
-  //   var parent = document.getElementsByClassName("ageHistogram")[0];
-  //   var child = document.getElementsByTagName("svg")[0];
-  //   var childRadar = document.getElementsByTagName("svg")[1];
-  //   parent.removeChild(child); 
-  //   var parentRadar = document.getElementsByClassName("radar")[0];
-  //   parentRadar.removeChild(childRadar);    
-  // }
+  var margin = {top: 60, right: 10, bottom: 50, left:70};
+  var w = 700 - margin.right - margin.left,
+      h = UniversalGraphHeight - margin.top - margin.bottom;   
+ 
 
   var histoData = [];
-
   rawData.forEach(function(obj, index){
     if(obj.gender == $('select[name="gender"]').val() && obj.icd == topStateIcd.icd){
       histoData.push(obj);
-      //console.log(obj);
     };
   });
 
   if (histoData.length > 0) {
 
-    // for(var property in e) {
-    //   if(e.gender == $('select[name="gender"]').val() && e.age_group == $('select[name="age_group"]').val()){
-    //     histoData.push(e);
-    //   }
-    // };
   
+    // define x and y scales
+var xScale = d3.scale.ordinal()
+    .rangeRoundBands([0,w], 0, 0);
 
-console.log("This is the filtered histoData, below...")
-console.log(histoData);
+var yScale = d3.scale.linear()
+    .range([h, 0]);   ///flip because y axis is inverted on page; larger y is down
 
+// define x axis and y axis
+var xAxis = d3.svg.axis()
+    .scale(xScale)
+    .orient("bottom");
 
+var yAxis = d3.svg.axis()
+    .scale(yScale)
+    .orient("left");
+    /*
+    ========
+              */
 
-  histoData.sort(function(a, b) { 
-    return b.deaths - a.deaths;
-});
+    console.log("This is the filtered histoData, below...")
+    console.log(histoData);
 
-  // histoDataLength = histoData.length >= 5 ? 5 : histoData.length;
-  histoDataLength = histoData.length == 11 ? 11 : histoData.length;
+    
 
+    // specify domains of the x and y scales
+    histoData.sort(function(a, b) { 
+      return b.deaths - a.deaths;
+    });
+    yScale.domain([0, histoData[0].deaths]); 
 
-  //histoData = histoData.slice(0, histoDataLength); ////  no longer slicing
-  // var graphData = [1, 800, 1200],
-  console.log("Inside GenHisto, histoData below ");
-  console.log(histoData);
-  var graphData = histoData,
-      w = window.innerWidth / 2.6,
-      h = UniversalGraphHeight; 
+    var graphData = histoData;
+    var age_groupSort = histoData;
 
-
-  var scaling = d3.scale.linear()
-    .domain([graphData[histoDataLength-1].deaths >= 100 ? graphData[histoDataLength-1].deaths - 100 : 0,  graphData[0].deaths * 1.1])
-    .range([h, 0]);
-
-   var yScale = d3.scale.linear()
-    .range([200, 0]); 
-
-    yScale.domain([0, graphData[0].deaths]);
-
-    graphData.sort(function(a, b) { 
-      return a.age_group - b.age_group;
+  age_groupSort.forEach(function(obj, index){
+    switch(obj.age_group) {
+      case "< 1 year":
+          obj.sortVal = 1;
+          break;
+      case "1-4 years":
+          obj.sortVal = 2;
+          break;
+      case "5-14 years":
+          obj.sortVal = 3;
+          break;
+      case "15-24 years":
+          obj.sortVal = 4;
+          break;
+      case "25-34 years":
+          obj.sortVal = 5;
+          break;
+      case "35-44 years":
+          obj.sortVal = 6;
+          break;
+      case "45-54 years":
+          obj.sortVal = 7;
+          break;
+      case "55-64 years":
+          obj.sortVal = 8;
+          break; 
+      case "65-74 years":
+          obj.sortVal = 9;
+          break;
+      case "75-84 years":
+          obj.sortVal = 10;
+          break;
+      case "85+ years":
+          obj.sortVal = 11;
+          break;  
+    }
+  });
+  age_groupSort.sort(function(a, b) { 
+      return a.sortVal - b.sortVal;
     });
 
- var axis = d3.svg.axis()
-  .ticks(6)
-  .scale(scaling);  
+
+  console.log("age_groupSort is below");
+  console.log(age_groupSort);
+    xScale.domain(age_groupSort.map(function(d) { return d.age_group; }) );  
+
+  histoDataLength = histoData.length == 11 ? 11 : histoData.length;
+
+  
+
+  
+  console.log("Inside GenHisto, histoData below ");
+  console.log(histoData);
 
 var canvas = d3.select(".ageHistogram")
   .append("svg")
-  .attr("width", w)
-  .attr("height", h)
+  .attr ({
+        "width": w + margin.right + margin.left,
+        "height": h + margin.top + margin.bottom
+      })
   .append("g")
-  .attr("transform", "translate(30, 20)");
+  .attr("transform","translate(" + margin.left + "," + margin.right + ")");
 
 
 var graphBars = canvas.selectAll("rect")
   .data(graphData)
   .enter()
   .append("rect")
-  .attr("fill", "pink")
-  .attr("width", 15)
   .attr("height", 0)
-  .attr("y", 200) 
-  .transition()
-  .duration(1300)
-  .delay(500)
-    //.delay( function(d,i) { return i * 200; })
-  .attr("height", function(d) {
-    return 200 - yScale(d.deaths);
-    //console.log(d.deaths);
-    //return (d.deaths);
-  })
-  .attr("x", function(d, i) {
-    return i * 40;
-  });
+    .attr("y", h)
+    .transition().duration(3000)
+    .delay( function(d,i) { return i * 200; })
+    // attributes can be also combined under one .attr
+    .attr({
+      "x": function(d) { return xScale(d.age_group); },
+      "y": function(d) { return yScale(d.deaths); },
+      "width": xScale.rangeBand(),
+      "height": function(d) { return  h - yScale(d.deaths); }
+    })
+    .style("fill", function(d,i) { return 'rgb(20, 20, ' + ((i * 30) + 100) + ')'})
+    .style("stroke", "black")
+    .style("stroke-width", 2);
 
 
 canvas.selectAll("text")
   .data(graphData)
   .enter()
-  .append("text")
-  .attr("fill", "blue")
-  .transition()
-  .delay(1500)
-  .attr("x", function(d, i) {
-    return (i * 40) + 15;
+  .append('text')
+  .text(function(d){
+      return d.deaths;
   })
-  .attr("y", 5)
-  .text(function(d) {
-    return d.age_group + " Deaths: " + d.deaths;
+  .attr({
+      "x": function(d){ return xScale(d.age_group) +  xScale.rangeBand()/2; },
+      "y": function(d){ return yScale(d.deaths)+ 12; },
+      "font-family": 'sans-serif',
+      "font-size": '18px',
+      "font-weight": 'bold',
+      "fill": 'white',
+      "text-anchor": 'middle'
   });
 
-  canvas.append("g") //append axis 
-    .attr("transform", "translate(0,200)")
-    .call(axis);
+  canvas.append("g") //append  x axis 
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + h + ")")
+    .call(xAxis)
+    .selectAll("text")
+    .attr("dx", "-.8em")
+    .attr("dy", ".25em")
+    .attr("transform", "rotate(-60)" )
+    .attr("fill", "#3DBE2E")
+    .style("text-anchor", "end")
+    .attr("font-size", "12px");
 
-    //GenPie(rawData);
+    var parenthIndex = topStateIcd.icd.indexOf("(");
+          topStateIcdShort = topStateIcd.icd.slice(parenthIndex, topStateIcd.length);
+
+  canvas.append("g") //append  y axis
+    .attr("class", "y axis")
+        .call(yAxis)
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -h/2)
+        .attr("font-size", "22px")
+        .attr("dy", "-2em")
+        .attr("fill", "#3DBE2E")
+        .style("text-anchor", "middle")
+        .text("Deaths by #1 State Cause");
+
+
+
+
+    
 
 
   } else{
