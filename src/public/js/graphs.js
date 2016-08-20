@@ -31,7 +31,7 @@ $('form').submit(function(event){
 function GenPie(rawData) {
   var pieData = [];
 
-  /////format data sets for men vs women for top causes
+  /////filter down data to user selected demograph
   rawData.forEach(function(obj, index){
     if(obj.gender == $('select[name="gender"]').val() && obj.age_group == $('select[name="age_group"]').val()){
       pieData.push(obj);
@@ -71,9 +71,6 @@ function GenPie(rawData) {
     pieData = pieData.slice(0, pieDataLength);
 
 
-    // var color = d3.scale.ordinal()
-    //   .range(["#1F7F14", "#1414FF", "cyan", "#3B60E4", "#5544BF"]);
-
       var color = d3.scale.ordinal()
       .range(["#1111FF", "#2306C2", "#263F9E", "#5544BF", "#563491"]);
 
@@ -94,7 +91,7 @@ function GenPie(rawData) {
 
     var pie = d3.layout.pie()
       .value(function(d) {return d.deaths});
-
+-
     var path = canvas.selectAll('path')
       .attr("transform", "translate(20, 0)")
       .data(pie(graphData))
@@ -125,7 +122,7 @@ var legend = canvas.selectAll('.legend')
             var offset =  height * color.domain().length / 10;   
             var horz = -3 * legendRectSize;                     
             var vert = i * height - offset + 150;                     
-            return 'translate(' + (2.5 * horz) + ',' + vert + ')';      
+            return 'translate(' + (2.9 * horz) + ',' + vert + ')';      
           });                                                   
 
         legend.append('rect')                                   
@@ -138,9 +135,9 @@ var legend = canvas.selectAll('.legend')
           .attr('x', legendRectSize + legendSpacing)            
           .attr('y', legendRectSize - legendSpacing)  
           .attr("fill", "#3DBE2E")
-          .attr("font-size", "16px")
+          .attr("font-size", "15px")
           .attr("font-weight", "bolder")
-          .text(function(d,i) { return graphData[i].icd.slice(7, graphData[i].icd.length); });
+          .text(function(d,i) { return graphData[i].icd.slice(7, graphData[i].icd.length) + ": " + graphData[i].deaths; });
 
 
       GenHisto(rawData, topStateIcd);
@@ -175,21 +172,21 @@ function GenHisto(rawData, topStateIcd) {
   if (histoData.length > 0) {
 
   
-    // define x and y scales
-var xScale = d3.scale.ordinal()
-    .rangeRoundBands([0,w], 0, 0);
+        // define x and y scales
+    var xScale = d3.scale.ordinal()
+        .rangeRoundBands([0,w], 0, 0);
 
-var yScale = d3.scale.linear()
-    .range([h, 0]);   ///flip because y axis is inverted on page; larger y is down
+    var yScale = d3.scale.linear()
+        .range([h, 0]);   ///flip because y axis is inverted on page; larger y is down
 
-// define x axis and y axis
-var xAxis = d3.svg.axis()
-    .scale(xScale)
-    .orient("bottom");
+    // define x axis and y axis
+    var xAxis = d3.svg.axis()
+        .scale(xScale)
+        .orient("bottom");
 
-var yAxis = d3.svg.axis()
-    .scale(yScale)
-    .orient("left");
+    var yAxis = d3.svg.axis()
+        .scale(yScale)
+        .orient("left");
 
     // specify domains of the x and y scales
     histoData.sort(function(a, b) { 
@@ -200,57 +197,54 @@ var yAxis = d3.svg.axis()
     var graphData = histoData;
     var age_groupSort = histoData;
 
-  age_groupSort.forEach(function(obj, index){
-    switch(obj.age_group) {
-      case "< 1 year":
-          obj.sortVal = 1;
-          break;
-      case "1-4 years":
-          obj.sortVal = 2;
-          break;
-      case "5-14 years":
-          obj.sortVal = 3;
-          break;
-      case "15-24 years":
-          obj.sortVal = 4;
-          break;
-      case "25-34 years":
-          obj.sortVal = 5;
-          break;
-      case "35-44 years":
-          obj.sortVal = 6;
-          break;
-      case "45-54 years":
-          obj.sortVal = 7;
-          break;
-      case "55-64 years":
-          obj.sortVal = 8;
-          break; 
-      case "65-74 years":
-          obj.sortVal = 9;
-          break;
-      case "75-84 years":
-          obj.sortVal = 10;
-          break;
-      case "85+ years":
-          obj.sortVal = 11;
-          break;  
-    }
-  });
-  age_groupSort.sort(function(a, b) { 
-      return a.sortVal - b.sortVal;
+    //previous sorting attempts on age_group have failed. method seems to handle my strings in unpredicatble way.
+      /// inserting my own variable to make this work
+    age_groupSort.forEach(function(obj, index){
+      switch(obj.age_group) {
+        case "< 1 year":
+            obj.sortVal = 1;
+            break;
+        case "1-4 years":
+            obj.sortVal = 2;
+            break;
+        case "5-14 years":
+            obj.sortVal = 3;
+            break;
+        case "15-24 years":
+            obj.sortVal = 4;
+            break;
+        case "25-34 years":
+            obj.sortVal = 5;
+            break;
+        case "35-44 years":
+            obj.sortVal = 6;
+            break;
+        case "45-54 years":
+            obj.sortVal = 7;
+            break;
+        case "55-64 years":
+            obj.sortVal = 8;
+            break; 
+        case "65-74 years":
+            obj.sortVal = 9;
+            break;
+        case "75-84 years":
+            obj.sortVal = 10;
+            break;
+        case "85+ years":
+            obj.sortVal = 11;
+            break;  
+      }
     });
+    age_groupSort.sort(function(a, b) { 
+        return a.sortVal - b.sortVal;
+      });
 
-
-    xScale.domain(age_groupSort.map(function(d) { return d.age_group; }) );  
-
-  histoDataLength = histoData.length == 11 ? 11 : histoData.length;
-
+    xScale.domain(age_groupSort.map(function(d) { return d.age_group; }) ); 
+    histoDataLength = histoData.length == 11 ? 11 : histoData.length;
   
 
-  
-
-var canvas = d3.select(".ageHistogram")
+var canvas = d3.select(".ageHistogram") //select space for d3 visual
   .append("svg")
   .attr ({
         "width": w + margin.right + margin.left,
@@ -275,7 +269,7 @@ var graphBars = canvas.selectAll("rect")
       "width": xScale.rangeBand(),
       "height": function(d) { return  h - yScale(d.deaths); }
     })
-    .style("fill", function(d,i) { return 'rgb(20, 20, ' + ((i * 30) + 100) + ')'})
+    .style("fill", function(d,i) { return 'rgb(20, 20, ' + ((d.deaths) + 10) + ')'})
     .style("stroke", "black")
     .style("stroke-width", 2);
 
@@ -323,13 +317,6 @@ canvas.selectAll("text")
         .attr("fill", "#3DBE2E")
         .style("text-anchor", "middle")
         .text("Deaths by #1 State Cause");
-
-
-
-
-    
-
-
   } else{
     d3.select(".ageHistogram")
     .append("p")
@@ -340,9 +327,3 @@ canvas.selectAll("text")
 //////////////////////
 //// END OF GenHisto
 /////=============================================/////////
-
-
-
-
-
-

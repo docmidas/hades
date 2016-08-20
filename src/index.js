@@ -6,7 +6,6 @@ var express     = require('express'),
     fs          = require('fs'),
     bodyParser  = require('body-parser');
 
-// var session     = require('express-session');
 /////////////////
 ////==SET VIEW ENGINE
 app.engine('hbs', exphbs({
@@ -25,8 +24,6 @@ app.use(express.static(__dirname + '/public')); ///stactic elements directory
 require('./config/db');
 ///////////////////
 ////==Mount Middleware
-// app.use('/membersonly/users/?', require('./controllers/users'));
-// app.use('/membersonly/gifts/?', require('./controllers/gifts'));
 app.use(require('./controllers/home'));
 
 ////////////////
