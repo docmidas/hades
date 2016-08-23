@@ -7,7 +7,7 @@ $('form').submit(function(event){
 ///initiate call to my databse of deaths stats
   $.ajax({
     type: 'post',
-    url: "http://localhost:3000/",
+    url: "/",
     data: {
       state: $('select[name="state"]').val(),
       gender: $('select[name="gender"]').val(),
