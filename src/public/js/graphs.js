@@ -91,7 +91,7 @@ function GenPie(rawData) {
 
     var pie = d3.layout.pie()
       .value(function(d) {return d.deaths});
--
+
     var path = canvas.selectAll('path')
       .attr("transform", "translate(20, 0)")
       .data(pie(graphData))
